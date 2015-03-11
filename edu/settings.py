@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'finance',
     'rest_framework',
+    'shell_plus'
 )
 
 MIDDLEWARE_CLASSES = (
