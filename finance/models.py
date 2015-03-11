@@ -12,7 +12,7 @@ class School(models.Model):
     name = models.CharField(max_length = 50)
     state = models.CharField(max_length = 50)
     zip = models.IntegerField(max_length = 50)
-    sector = models.CharField(max_length=2,
+    sector = models.CharField(max_length=30,
                                       choices=SECTOR_CHOICES,
                                       default=None)
 
