@@ -4,12 +4,12 @@ from django.db import models
 
 SECTOR_CHOICES = (
         ('public', ('Public')),
-        ('non_profit', ('Private-Nonprofit')),
-        ('private', ('Proprietary')),
+        ('private-nonprofit', ('Private-Nonprofit')),
+        ('proprietary', ('Proprietary')),
     )
 
 class School(models.Model):
-    name = models.CharField(max_length = 50)
+    name = models.CharField(max_length = 200)
     state = models.CharField(max_length = 50)
     zip = models.IntegerField(max_length = 50)
     sector = models.CharField(max_length=30,
