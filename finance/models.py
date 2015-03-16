@@ -4,10 +4,15 @@ from django.db import models
 
 SECTOR_CHOICES = (
         ('public', ('Public')),
+        ('private', ('Private')),
         ('private-nonprofit', ('Private-Nonprofit')),
         ('proprietary', ('Proprietary')),
-        ('foreign_private', ('Foreign Private')),
-        ('foreign_public', ('Foreign Public')),
+        ('foreign private', ('Foreign Private')),
+        ('foreign-private', ('Foreign Private')),
+        ('foreign public', ('Foreign Public')),
+        ('foreign-public', ('Foreign Public')),
+        ('foreign for-profit', ('Foreign For-Profit')),
+        ('foreign-for-profit', ('Foreign For-Profit')),
     )
 
 class School(models.Model):
@@ -19,12 +24,13 @@ class School(models.Model):
                                       default=None)
 
 LOAN_TYPE_CHOICES = (
-        ('dl_sub_ugrad', ('Direct Loan Subsidized Undergraduate')),
+        ('dl_unsub', ('Direct Loan Unubsidized')),
         ('dl_unsub_ugrad', ('Direct Loan Unsubsidized Undergraduate')),
-        ('dl_sub_grad', ('Direct Loan Subsidized Graduate')),
         ('dl_unsub_grad', ('Direct Loan Unsubsidized Graduate')),
         ('dl_parent_plus', ('Direct Loan Parent Plus')),
         ('dl_grad_plus', ('Direct Loan Grad Plus')),
+        ('dl_sub_ugrad', ('Direct Loan Subsidized Undergraduate')),
+        ('dl_sub_grad', ('Direct Loan Subsidized Graduate')),
     )
 
 GRANT_TYPE_CHOICES = (

@@ -7,10 +7,6 @@ import glob
 class RowCouldNotBeSaved(Exception):
     pass
 
-def retrieve_excel_files(funding_type):
-    current_dir = dirname(realpath(__file__))
-    return [file for file in glob.glob(current_dir + "/files/" + funding_type + os.sep + "*.xls")]
-
 def seed_data_from_files(files, funding_type):
     for file in files:
         file_reader = FileReader(file=file,funding_type=funding_type)
@@ -24,14 +20,14 @@ def seed_data_from_files(files, funding_type):
 
 def save_loan_data_from_single_file(data, file, year):
     for row in data:
-        school = _get_or_create_school(row, file)
+        school = _get_or_create_school(row)
         save_loans_from_single_row(row,school,file, year)
     return True
 
 def save_grant_data_from_single_file(data, file, year):
     for row in data:
-        school = _get_or_create_school(row, file)
-        dpt_of_ed_id = row[0]
+        school = _get_or_create_school(row)
+
         try:
             #figure out how to extract grant type as kv pair
             #add additional programs from 2006 - 2010
@@ -49,16 +45,14 @@ def save_grant_data_from_single_file(data, file, year):
                         grant.save()
                     else:
                         continue
-            return True
 
         except RowCouldNotBeSaved:
-            error = 'Error! Grant with School ID: ' + str(dpt_of_ed_id) + ' in File ' + file + ' cannot be saved.'
+            error = 'Error! Grant with School ID: ' + str(school.name) + ' in File ' + file + ' cannot be saved.'
             raise RowCouldNotBeSaved(error)
 
 def save_loans_from_single_row(row, school, file, year):
-    dpt_of_ed_id = row[0]
     try:
-        column_loan_types = [5,10,15,20,25,30]
+        column_loan_types = [5,10,15,20,25]
         for column in column_loan_types:
             if row[column] is not 0:
                 loan_data = extract_row_data_for_specific_loan_type_at_single_school(row,column, column_loan_types)
@@ -77,7 +71,7 @@ def save_loans_from_single_row(row, school, file, year):
                     continue
 
     except:
-        error = 'Error! Loan with School ID: ' + str(dpt_of_ed_id) + ' in File ' + file + ' cannot be saved.'
+        error = 'Error! Loan with School ID: ' + str(school.name) + ' in File ' + file + ' cannot be saved.'
         raise RowCouldNotBeSaved(error)
 
 def extract_row_data_for_specific_loan_type_at_single_school(row,column,column_loan_types):
@@ -85,11 +79,11 @@ def extract_row_data_for_specific_loan_type_at_single_school(row,column,column_l
 
     if row[column] is not 0:
         return {'recipients':row[column],
-        'loan_type':LOAN_TYPE_CHOICES[index][0],
-        'number_of_loans':row[column + 1],
-        'loan_money_originated':row[column + 2],
-        'number_of_disbursements':row[column + 3],
-        'loan_money_disbursed':row[column + 4]}
+                'loan_type':LOAN_TYPE_CHOICES[index][0],
+                'number_of_loans':row[column + 1],
+                'loan_money_originated':row[column + 2],
+                'number_of_disbursements':row[column + 3],
+                'loan_money_disbursed':row[column + 4]}
     else:
         return {}
 
@@ -98,26 +92,19 @@ def extract_row_data_for_specific_grant_type_at_single_school(row,column, column
 
     if row[column] is not 0:
         return {'recipients':row[column],
-        'grant_type':GRANT_TYPE_CHOICES[index][0],
-        'grant_money_disbursed':row[column + 1]}
+                'grant_type':GRANT_TYPE_CHOICES[index][0],
+                'grant_money_disbursed':row[column + 1]}
     else:
         return {}
 
-def _get_or_create_school(row, file):
-    dpt_of_ed_id = row[0]
-    try:
-        school, exists = School.objects.get_or_create(name=row[1].strip(),state=row[2].strip(),
-                                                      zip=row[3], sector=row[4].strip().lower())
+def _get_or_create_school(row):
+    school = School.objects.filter(name=row[1].strip()).first()
 
-        if exists:
-            school = school
-        else:
-            school = School.objects.create(name=row[1].strip(),state=row[2].strip(),
-                                                      zip=row[3], sector=row[4].lower().strip())
-            school.save()
+    if school:
+        school = school
+    else:
+        school = School.objects.create(name=row[1].strip(),state=row[2].strip(),
+                                                  zip=row[3], sector=row[4].lower())
+        school.save()
 
-        return school
-
-    except:
-        error = 'Error! School with ID: ' + str(dpt_of_ed_id) + ' in File ' + file + ' cannot be saved.'
-        raise RowCouldNotBeSaved(error)
+    return school

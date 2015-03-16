@@ -88,23 +88,26 @@ class SchoolLoanList(APIView):
         serializer = LoanSerializer(loans, many=True)
         return Response(serializer.data)
 
-class GrantListByYear(APIView):
-    """
-    Retrieve all grants from a specific year.
-    """
 
-    def get(self, request, year, format=None):
-        grants = Grant.objects.filter(year=year)
-        serializer = GrantSerializer(grants, many=True)
-        return Response(serializer.data)
+#Convert to redis store before implementing these views to avoid socket error
 
-
-class LoanListByYear(APIView):
-    """
-    Retrieve all loans from a specific year.
-    """
-
-    def get(self, request, year, format=None):
-        loans = Loan.objects.filter(year=year)
-        serializer = LoanSerializer(loans, many=True)
-        return Response(serializer.data)
+# class GrantListByYear(APIView):
+#     """
+#     Retrieve all grants from a specific year.
+#     """
+#
+#     def get(self, request, year, format=None):
+#         grants = Grant.objects.filter(year=year)
+#         serializer = GrantSerializer(grants, many=True)
+#         return Response(serializer.data)
+#
+#
+# class LoanListByYear(APIView):
+#     """
+#     Retrieve all loans from a specific year.
+#     """
+#
+#     def get(self, request, year, format=None):
+#         loans = Loan.objects.filter(year=year)
+#         serializer = LoanSerializer(loans, many=True)
+#         return Response(serializer.data)

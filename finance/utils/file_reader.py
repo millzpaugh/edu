@@ -24,7 +24,8 @@ class FileReader():
             data = pandas.io.excel.read_excel(self.file, 1)
             return data.values[5:]
         except:
-            raise FileCouldNotBeReadException()
+            file = self.file
+            raise FileCouldNotBeReadException('File:' + file)
 
 
 
