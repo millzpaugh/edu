@@ -19,7 +19,7 @@ class SchoolList(APIView):
     """
     def get(self, request, format=None):
         school = School.objects.all()
-        serializer = SchoolSerializer(school, many=True)
+        serializer = SchoolSerializer(school, many=True, context={'request': request})
         return Response(serializer.data)
 
     def post(self, request, format=None):
@@ -41,7 +41,7 @@ class SchoolDetail(APIView):
 
     def get(self, request, pk, format=None):
         school = self.get_object(pk)
-        serializer = SchoolSerializer(school)
+        serializer = SchoolSerializer(school, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -88,7 +88,7 @@ class SchoolLoanList(APIView):
     def get(self, request, pk, format=None):
         school = self.get_object(pk)
         loans = Loan.objects.filter(school_id=school)
-        serializer = LoanSerializer(loans, many=True)
+        serializer = LoanSerializer(loans, many=True, )
         return Response(serializer.data)
 
 class SchoolHighlight(generics.GenericAPIView):
@@ -97,7 +97,7 @@ class SchoolHighlight(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         school = self.get_object()
-        return Response(school.highlighted)
+        return Response(school.highlight)
 
 
 @api_view(('GET',))
@@ -108,9 +108,9 @@ def api_root(request, format=None):
 
     """
     return Response({
-        'school_url':  'http://localhost:7000/school/{school}/',
-        'school_grants_url': 'http://localhost:7000/school/{school}/grants/',
-        'school_loans_url': 'http://localhost:7000/school/{school}/loans/',
+        'school_url':  'http://localhost:7000/schools/{school}/',
+        'school_grants_url': 'http://localhost:7000/schools/{school}/grants/',
+        'school_loans_url': 'http://localhost:7000/schools/{school}/loans/',
         'schools_url': reverse('school-list', request=request, format=format),
     })
 
@@ -137,3 +137,33 @@ def api_root(request, format=None):
 #         loans = Loan.objects.filter(year=year)
 #         serializer = LoanSerializer(loans, many=True)
 #         return Response(serializer.data)
+
+class LoanDetail(APIView):
+    """
+    Retrieve, update or delete a school instance.
+    """
+    def get_object(self, pk):
+        try:
+            return Loan.objects.get(pk=pk)
+        except Loan.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        loan = self.get_object(pk)
+        serializer = LoanSerializer(loan, context={'request': request})
+        return Response(serializer.data)
+
+class GrantDetail(APIView):
+    """
+    Retrieve, update or delete a school instance.
+    """
+    def get_object(self, pk):
+        try:
+            return Grant.objects.get(pk=pk)
+        except Grant.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        grant = self.get_object(pk)
+        serializer = GrantSerializer(grant, context={'request': request})
+        return Response(serializer.data)

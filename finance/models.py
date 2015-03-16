@@ -1,4 +1,7 @@
 from django.db import models
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters.html import HtmlFormatter
+from pygments import highlight
 
 # Create your models here.
 
@@ -22,6 +25,20 @@ class School(models.Model):
     sector = models.CharField(max_length=30,
                                       choices=SECTOR_CHOICES,
                                       default=None)
+    highlighted = models.TextField()
+
+    def save(self, *args, **kwargs):
+        """
+        Use the `pygments` library to create a highlighted HTML
+        representation of the code snippet.
+         """
+        lexer = get_lexer_by_name(self.language)
+        linenos = self.linenos and 'table' or False
+        options = self.title and {'title': self.title} or {}
+        formatter = HtmlFormatter(style=self.style, linenos=linenos,
+                                  full=True, **options)
+        self.highlighted = highlight(self.code, lexer, formatter)
+        super(School, self).save(*args, **kwargs)
 
 LOAN_TYPE_CHOICES = (
         ('dl_unsub', ('Direct Loan Unubsidized')),
@@ -50,6 +67,20 @@ class Loan(models.Model):
     number_of_disbursements = models.IntegerField(null=True)
     loan_money_disbursed = models.DecimalField(max_digits=30, decimal_places=2, null=True)
     year = models.IntegerField(null=False)
+    highlighted = models.TextField()
+
+    def save(self, *args, **kwargs):
+        """
+        Use the `pygments` library to create a highlighted HTML
+        representation of the code snippet.
+         """
+        lexer = get_lexer_by_name(self.language)
+        linenos = self.linenos and 'table' or False
+        options = self.title and {'title': self.title} or {}
+        formatter = HtmlFormatter(style=self.style, linenos=linenos,
+                                  full=True, **options)
+        self.highlighted = highlight(self.code, lexer, formatter)
+        super(Loan, self).save(*args, **kwargs)
 
 class Grant(models.Model):
     school_id= models.ForeignKey(School)
@@ -59,6 +90,20 @@ class Grant(models.Model):
     recipients = models.IntegerField(null=True)
     grant_money_disbursed = models.DecimalField(max_digits=30, decimal_places=2, null=True)
     year = models.IntegerField(null=False)
+    highlighted = models.TextField()
+
+    def save(self, *args, **kwargs):
+        """
+        Use the `pygments` library to create a highlighted HTML
+        representation of the code snippet.
+         """
+        lexer = get_lexer_by_name(self.language)
+        linenos = self.linenos and 'table' or False
+        options = self.title and {'title': self.title} or {}
+        formatter = HtmlFormatter(style=self.style, linenos=linenos,
+                                  full=True, **options)
+        self.highlighted = highlight(self.code, lexer, formatter)
+        super(Grant, self).save(*args, **kwargs)
 
 
 

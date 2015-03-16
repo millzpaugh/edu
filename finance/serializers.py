@@ -1,17 +1,20 @@
 from django.forms import widgets
 from rest_framework import serializers
+from rest_framework.reverse import reverse
+
 
 from finance.models import School, SECTOR_CHOICES, Loan, Grant
 
 class SchoolSerializer(serializers.HyperlinkedModelSerializer):
-    # highlight = serializers.HyperlinkedIdentityField(view_name='school-highlight', format='html')
+    url = serializers.HyperlinkedIdentityField(view_name='school-highlight', format='html')
 
     class Meta:
         model = School
-        fields = ('id', 'name', 'state', 'zip', 'sector')
+        fields = ('id', 'name', 'url', 'state', 'zip', 'sector')
 
 
 class LoanSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = Loan
         fields = ('id', 'loan_type', 'recipients', 'number_of_loans',
