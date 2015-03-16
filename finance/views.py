@@ -2,8 +2,12 @@ from django.http import Http404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
+from rest_framework import status, generics, renderers
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+
 
 from finance.models import School, Loan, Grant
 from finance.serializers import SchoolSerializer, GrantSerializer, LoanSerializer
@@ -75,7 +79,6 @@ class SchoolLoanList(APIView):
     Retrieve all loans from a specific school.
 
     """
-
     def get_object(self, pk):
         try:
             return School.objects.get(pk=pk)
@@ -87,6 +90,29 @@ class SchoolLoanList(APIView):
         loans = Loan.objects.filter(school_id=school)
         serializer = LoanSerializer(loans, many=True)
         return Response(serializer.data)
+
+class SchoolHighlight(generics.GenericAPIView):
+    queryset = School.objects.all()
+    renderer_classes = (renderers.StaticHTMLRenderer,)
+
+    def get(self, request, *args, **kwargs):
+        school = self.get_object()
+        return Response(school.highlighted)
+
+
+@api_view(('GET',))
+def api_root(request, format=None):
+    """
+    Endpoints Available for Student Loan & Grant Data.
+    (Currently, schools_url is the only navigable link from the API root page.)
+
+    """
+    return Response({
+        'school_url':  'http://localhost:7000/school/{school}/',
+        'school_grants_url': 'http://localhost:7000/school/{school}/grants/',
+        'school_loans_url': 'http://localhost:7000/school/{school}/loans/',
+        'schools_url': reverse('school-list', request=request, format=format),
+    })
 
 
 #Convert to redis store before implementing these views to avoid socket error

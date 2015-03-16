@@ -87,3 +87,26 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-ed_data/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    # Use hyperlinked styles by default.
+    # Only used if the `serializer_class` attribute is not set on a view.
+    'DEFAULT_MODEL_SERIALIZER_CLASS':
+        'rest_framework.serializers.HyperlinkedModelSerializer',
+
+    # Only Users are writeable, and we're internal, so allow unauthenticated writes.
+    'DEFAULT_PERMISSION_CLASSES': (
+       'rest_framework.permissions.AllowAny',
+    ),
+
+    # Allow clients to use queryset expressions for querying
+    # Example: ?user__fool_uid=5
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework.filters.DjangoFilterBackend',
+    ),
+
+    # Pagination
+    'PAGINATE_BY': 20,                 # Default to 10
+    'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
+}
+
