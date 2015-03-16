@@ -6,12 +6,14 @@ SECTOR_CHOICES = (
         ('public', ('Public')),
         ('private-nonprofit', ('Private-Nonprofit')),
         ('proprietary', ('Proprietary')),
+        ('foreign_private', ('Foreign Private')),
+        ('foreign_public', ('Foreign Public')),
     )
 
 class School(models.Model):
     name = models.CharField(max_length = 200)
     state = models.CharField(max_length = 50)
-    zip = models.IntegerField(max_length = 50)
+    zip = models.CharField(max_length = 50)
     sector = models.CharField(max_length=30,
                                       choices=SECTOR_CHOICES,
                                       default=None)
@@ -33,13 +35,13 @@ GRANT_TYPE_CHOICES = (
 
 class Loan(models.Model):
     school_id= models.ForeignKey(School)
-    loan_type = models.CharField(max_length=2,
+    loan_type = models.CharField(max_length=80,
                                       choices=LOAN_TYPE_CHOICES,
                                       default=None)
     recipients = models.IntegerField(null=True)
     number_of_loans = models.IntegerField(null=True)
     loan_money_originated = models.DecimalField(max_digits=30, decimal_places=2, null=True)
-    number_of_disbursements = models.IntegerField()
+    number_of_disbursements = models.IntegerField(null=True)
     loan_money_disbursed = models.DecimalField(max_digits=30, decimal_places=2, null=True)
     year = models.IntegerField(null=False)
 

@@ -55,7 +55,7 @@ class SchoolDetail(APIView):
 
 class SchoolGrantList(APIView):
     """
-    Retrieve, update or delete a school instance.
+    Retrieve all grants from a specific school instance.
     """
     def get_object(self, pk):
         try:
@@ -71,6 +71,11 @@ class SchoolGrantList(APIView):
 
 
 class SchoolLoanList(APIView):
+    """
+    Retrieve all loans from a specific school.
+
+    """
+
     def get_object(self, pk):
         try:
             return School.objects.get(pk=pk)
