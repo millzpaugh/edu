@@ -1,7 +1,11 @@
-.idea
+.idea/
 __pycache__/
 *.py[cod]
 *~
 .ipynb_checkpoints/
 *.ipynb
 *.pyc
+venv
+.venv
+*.ipynb
+*.db
