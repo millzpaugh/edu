@@ -20,6 +20,7 @@ ipython==3.0.0
 jsonschema==2.4.0
 mistune==0.5.1
 numpy==1.9.2
+pandas==0.15.2
 psycopg2==2.6
 ptyprocess==0.4
 python-dateutil==2.4.1
