@@ -76,20 +76,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'edu',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
-    }
-}
 # Static ed_data (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-ed_data/
 
-STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
     # Use hyperlinked styles by default.
@@ -126,7 +115,7 @@ ALLOWED_HOSTS = ['*']
 # Static asset configuration
 import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
