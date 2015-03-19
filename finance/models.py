@@ -27,18 +27,18 @@ class School(models.Model):
                                       default=None)
     highlighted = models.TextField()
 
-    def save(self, *args, **kwargs):
-        """
-        Use the `pygments` library to create a highlighted HTML
-        representation of the code snippet.
-         """
-        lexer = get_lexer_by_name(self.language)
-        linenos = self.linenos and 'table' or False
-        options = self.title and {'title': self.title} or {}
-        formatter = HtmlFormatter(style=self.style, linenos=linenos,
-                                  full=True, **options)
-        self.highlighted = highlight(self.code, lexer, formatter)
-        super(School, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     """
+    #     Use the `pygments` library to create a highlighted HTML
+    #     representation of the code snippet.
+    #      """
+    #     lexer = get_lexer_by_name(self.language)
+    #     linenos = self.linenos and 'table' or False
+    #     options = self.title and {'title': self.title} or {}
+    #     formatter = HtmlFormatter(style=self.style, linenos=linenos,
+    #                               full=True, **options)
+    #     self.highlighted = highlight(self.code, lexer, formatter)
+    #     super(School, self).save(*args, **kwargs)
 
 LOAN_TYPE_CHOICES = (
         ('dl_unsub', ('Direct Loan Unubsidized')),
@@ -69,18 +69,18 @@ class Loan(models.Model):
     year = models.IntegerField(null=False)
     highlighted = models.TextField()
 
-    def save(self, *args, **kwargs):
-        """
-        Use the `pygments` library to create a highlighted HTML
-        representation of the code snippet.
-         """
-        lexer = get_lexer_by_name(self.language)
-        linenos = self.linenos and 'table' or False
-        options = self.title and {'title': self.title} or {}
-        formatter = HtmlFormatter(style=self.style, linenos=linenos,
-                                  full=True, **options)
-        self.highlighted = highlight(self.code, lexer, formatter)
-        super(Loan, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     """
+    #     Use the `pygments` library to create a highlighted HTML
+    #     representation of the code snippet.
+    #      """
+    #     lexer = get_lexer_by_name(self.language)
+    #     linenos = self.linenos and 'table' or False
+    #     options = self.title and {'title': self.title} or {}
+    #     formatter = HtmlFormatter(style=self.style, linenos=linenos,
+    #                               full=True, **options)
+    #     self.highlighted = highlight(self.code, lexer, formatter)
+    #     super(Loan, self).save(*args, **kwargs)
 
 class Grant(models.Model):
     school_id= models.ForeignKey(School)
@@ -92,18 +92,18 @@ class Grant(models.Model):
     year = models.IntegerField(null=False)
     highlighted = models.TextField()
 
-    def save(self, *args, **kwargs):
-        """
-        Use the `pygments` library to create a highlighted HTML
-        representation of the code snippet.
-         """
-        lexer = get_lexer_by_name(self.language)
-        linenos = self.linenos and 'table' or False
-        options = self.title and {'title': self.title} or {}
-        formatter = HtmlFormatter(style=self.style, linenos=linenos,
-                                  full=True, **options)
-        self.highlighted = highlight(self.code, lexer, formatter)
-        super(Grant, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     """
+    #     Use the `pygments` library to create a highlighted HTML
+    #     representation of the code snippet.
+    #      """
+    #     lexer = get_lexer_by_name(self.language)
+    #     linenos = self.linenos and 'table' or False
+    #     options = self.title and {'title': self.title} or {}
+    #     formatter = HtmlFormatter(style=self.style, linenos=linenos,
+    #                               full=True, **options)
+    #     self.highlighted = highlight(self.code, lexer, formatter)
+    #     super(Grant, self).save(*args, **kwargs)
 
 
 

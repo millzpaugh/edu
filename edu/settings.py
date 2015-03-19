@@ -10,11 +10,18 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from os import environ
 # import dj_database_url
 
-import dj_database_url
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+ENVIRONMENT = environ.get('ENVIRONMENT', 'dev')
+
+if 'live' in ENVIRONMENT:
+    from config.live import *
+
+else:
+    from config.dev import *
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,9 +31,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'yp+&cbb7865s*1ihy&_ukko%1$%g%!nz2rf)ie@_w80ph_73&_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
-TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -79,7 +84,6 @@ USE_TZ = True
 # Static ed_data (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-ed_data/
 
-
 REST_FRAMEWORK = {
     # Use hyperlinked styles by default.
     # Only used if the `serializer_class` attribute is not set on a view.
@@ -104,7 +108,6 @@ REST_FRAMEWORK = {
 
 # Parse database configuration from $DATABASE_URL
 
-DATABASES['default'] =  dj_database_url.config()
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -113,11 +116,11 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ALLOWED_HOSTS = ['*']
 
 # Static asset configuration
-import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = ''
+STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
