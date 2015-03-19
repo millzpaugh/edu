@@ -21,3 +21,13 @@ gunicorn==19.1.1
 ipython==3.0.0
 jsonschema==2.4.0
 mistune==0.5.1
+ptyprocess==0.4
+python-dateutil==2.4.1
+pytz==2014.10
+six==1.9.0
+static==0.4
+static3==0.5.1
+terminado==0.5
+wsgiref==0.1.2
+xlrd==0.9.3
+
