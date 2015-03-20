@@ -1,9 +1,7 @@
 """
 Django settings for edu project.
-
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
-
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
@@ -19,6 +17,7 @@ TEMPLATE_DEBUG = False
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 ENVIRONMENT = environ.get('ENVIRONMENT', 'dev')
+DATABASE_URL = environ.get('DATABASE_URL')
 
 if 'live' in ENVIRONMENT:
     from config.live import *
@@ -112,7 +111,7 @@ REST_FRAMEWORK = {
 
 # Parse database configuration from $DATABASE_URL
 
-DATABASES['default'] =  dj_database_url.config()
+DATABASE_URL['default'] =  dj_database_url.config()
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -127,6 +126,3 @@ STATIC_URL = 'staticfiles'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-
-
-
