@@ -11,8 +11,8 @@ import os
 from os import environ
 import dj_database_url
 
-DEBUG = False
-TEMPLATE_DEBUG = False
+DEBUG = True
+TEMPLATE_DEBUG = True
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -109,7 +109,7 @@ REST_FRAMEWORK = {
 }
 
 # Parse database configuration from $DATABASE_URL
-DATABASES = {'default': dj_database_url.config()}
+# DATABASES = {'default': dj_database_url.config()}
 
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
@@ -128,3 +128,14 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(PROJECT_PATH, 'static'),
 )
+
+DATABASES = {
+    'default':  {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'edu_api',
+        'USER': 'ebroot',
+        'PASSWORD': 'knew1for!',
+        'HOST': 'dept-of-edu.cvqqp54rm4vr.us-east-1.rds.amazonaws.com',
+        'PORT': 3306,
+    }
+}
