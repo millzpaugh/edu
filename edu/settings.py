@@ -11,17 +11,35 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 from os import environ
-# import dj_database_url
+import dj_database_url
+
+DEBUG = False
+TEMPLATE_DEBUG = False
+
+
+DATABASES = {
+    'default':  {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'edu_api',
+        'USER': 'amillspaugh',
+        'PASSWORD': 'knew1for!',
+        'HOST': 'dept-of-edu.cvqqp54rm4vr.us-east-1.rds.amazonaws.com',
+        'PORT': 3306,
+    }
+}
+
+
+DATABASES['default'] =  dj_database_url.config()
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 ENVIRONMENT = environ.get('ENVIRONMENT', 'dev')
 
-if 'live' in ENVIRONMENT:
-    from config.live import *
-
-else:
-    from config.dev import *
+# if 'live' in ENVIRONMENT:
+#     from config.live import *
+#
+# else:
+#     from config.dev import *
 
 
 # Quick-start development settings - unsuitable for production
@@ -118,9 +136,11 @@ ALLOWED_HOSTS = ['*']
 
 # Static asset configuration
 STATIC_ROOT = 'static'
-STATIC_URL = '/home/django/edu/edu/static'
+STATIC_URL = 'staticfiles'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+
 
