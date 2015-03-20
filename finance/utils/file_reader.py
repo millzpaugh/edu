@@ -8,7 +8,7 @@ class FileCouldNotBeReadException(Exception):
     def __str__(self):
         return 'Cannot read file {name}'.format(name=self.filename)
 
-class FileReader():
+class FileReader(object):
     def __init__(self, file, funding_type):
         self.file = file
         self.funding_type = funding_type
