@@ -1,6 +1,5 @@
 DEBUG = False
 TEMPLATE_DEBUG = False
-import dj_database_url
 
 DATABASES = {
     'default':  {
@@ -14,4 +13,3 @@ DATABASES = {
 }
 
 
-DATABASES['default'] =  dj_database_url.config()

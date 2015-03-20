@@ -16,30 +16,15 @@ import dj_database_url
 DEBUG = False
 TEMPLATE_DEBUG = False
 
-
-DATABASES = {
-    'default':  {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'edu_api',
-        'USER': 'amillspaugh',
-        'PASSWORD': 'knew1for!',
-        'HOST': 'dept-of-edu.cvqqp54rm4vr.us-east-1.rds.amazonaws.com',
-        'PORT': 3306,
-    }
-}
-
-
-DATABASES['default'] =  dj_database_url.config()
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 ENVIRONMENT = environ.get('ENVIRONMENT', 'dev')
 
-# if 'live' in ENVIRONMENT:
-#     from config.live import *
-#
-# else:
-#     from config.dev import *
+if 'live' in ENVIRONMENT:
+    from config.live import *
+
+else:
+    from config.dev import *
 
 
 # Quick-start development settings - unsuitable for production
@@ -127,6 +112,7 @@ REST_FRAMEWORK = {
 
 # Parse database configuration from $DATABASE_URL
 
+DATABASES['default'] =  dj_database_url.config()
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
