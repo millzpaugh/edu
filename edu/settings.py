@@ -17,13 +17,12 @@ TEMPLATE_DEBUG = False
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 ENVIRONMENT = environ.get('ENVIRONMENT', 'dev')
-DATABASE_URL = environ.get('DATABASE_URL')
 
-if 'live' in ENVIRONMENT:
-    from config.live import *
-
-else:
-    from config.dev import *
+# if 'live' in ENVIRONMENT:
+#     from config.live import *
+#
+# else:
+#     from config.dev import *
 
 
 # Quick-start development settings - unsuitable for production
