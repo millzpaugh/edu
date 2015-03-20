@@ -47,7 +47,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'finance',
     'rest_framework',
-    'shell_plus'
+    'shell_plus',
+    'gunicorn'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -120,6 +121,6 @@ STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'staticfiles'),
+    os.path.join(BASE_DIR, 'static'),
 )
 
