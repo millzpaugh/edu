@@ -9,14 +9,12 @@ urlpatterns = [
     url(r'^schools/(?P<pk>[0-9]+)/loans/$', views.SchoolLoanList.as_view(), name='school-loan-list'),
     url(r'^schools/(?P<pk>[0-9]+)/$', views.SchoolHighlight.as_view(), name='school-highlight'),
 
-    # url(r'^(?P<year>[0-9]+)/loans/$', views.LoanListByYear.as_view()),
-    # url(r'^(?P<year>[0-9]+)/grants/$', views.GrantListByYear.as_view()),
-
+#Loans
     url(r'^loans/$', views.LoanList.as_view(), name='loan-list'),
     url(r'^loans/(?P<pk>[0-9]+)/$', views.LoanDetail.as_view(), name='loan-detail'),
     url(r'^loans/(?P<pk>[0-9]+)/$', views.LoanHighlight.as_view(), name='loan-highlight'),
 
-
+#Grants
     url(r'^grants/$', views.GrantList.as_view(), name='grant-list'),
     url(r'^grants/(?P<pk>[0-9]+)/$', views.GrantDetail.as_view(), name='grant-detail'),
     url(r'^grants/(?P<pk>[0-9]+)/$', views.GrantHighlight.as_view(), name='grant-highlight'),

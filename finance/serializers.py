@@ -15,6 +15,7 @@ class SchoolSerializer(serializers.HyperlinkedModelSerializer):
         model = School
         fields = ('id', 'name', 'state', 'zip', 'sector','url','loans','grants')
 
+
 class LoanSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='loan-highlight', format='html')
 
