@@ -13,83 +13,79 @@ from finance.models import School, Loan, Grant
 from finance.serializers import SchoolSerializer, GrantSerializer, LoanSerializer
 
 
-class SchoolList(APIView):
+@api_view(('GET',))
+def api_root(request, format=None):
+    """
+    Endpoints Available for Student Loan & Grant Data.
+
+    """
+    return Response({
+        'schools_url': reverse('school-list', request=request, format=format),
+        'grants_url': reverse('grant-list', request=request, format=format),
+        'loans_url': reverse('loan-list', request=request, format=format),
+    })
+
+
+class SchoolList(generics.ListCreateAPIView):
     """
     List all schools, or create a new school.
     """
-    def get(self, request, format=None):
-        school = School.objects.all()
-        serializer = SchoolSerializer(school, many=True, context={'request': request})
-        return Response(serializer.data)
+    model= School
+    serializer_class = SchoolSerializer
 
-    def post(self, request, format=None):
-        serializer = SchoolSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        queryset = School.objects.all()
+        return queryset
 
-class SchoolDetail(APIView):
+
+class SchoolDetail(generics.ListAPIView):
     """
     Retrieve, update or delete a school instance.
     """
-    def get_object(self, pk):
-        try:
-            return School.objects.get(pk=pk)
-        except School.DoesNotExist:
-            raise Http404
+    model= School
+    serializer_class = SchoolSerializer
 
-    def get(self, request, pk, format=None):
-        school = self.get_object(pk)
-        serializer = SchoolSerializer(school, context={'request': request})
-        return Response(serializer.data)
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases for
+        the user as determined by the username portion of the URL.
+        """
+        pk = self.kwargs['pk']
+        return School.objects.filter(id=pk)
 
-    def put(self, request, pk, format=None):
-        school = self.get_object(pk)
-        serializer = SchoolSerializer(school, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk, format=None):
-        school = self.get_object(pk)
-        school.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-class SchoolGrantList(APIView):
+class SchoolGrantList(generics.ListAPIView):
     """
     Retrieve all grants from a specific school instance.
     """
-    def get_object(self, pk):
-        try:
-            return School.objects.get(pk=pk)
-        except School.DoesNotExist:
-            raise Http404
 
-    def get(self, request, pk, format=None):
-        school = self.get_object(pk)
-        grants = Grant.objects.filter(school_id=school)
-        serializer = GrantSerializer(grants, many=True)
-        return Response(serializer.data)
+    model= Grant
+    serializer_class = GrantSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases for
+        the user as determined by the username portion of the URL.
+        """
+        pk = self.kwargs['pk']
+        return Grant.objects.filter(school_id=pk)
 
 
-class SchoolLoanList(APIView):
+class SchoolLoanList(generics.ListAPIView):
     """
     Retrieve all loans from a specific school.
 
     """
-    def get_object(self, pk):
-        try:
-            return School.objects.get(pk=pk)
-        except School.DoesNotExist:
-            raise Http404
+    model= Loan
+    serializer_class = LoanSerializer
 
-    def get(self, request, pk, format=None):
-        school = self.get_object(pk)
-        loans = Loan.objects.filter(school_id=school)
-        serializer = LoanSerializer(loans, many=True, )
-        return Response(serializer.data)
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases for
+        the user as determined by the username portion of the URL.
+        """
+        pk = self.kwargs['pk']
+        return Loan.objects.filter(school_id=pk)
 
 class SchoolHighlight(generics.GenericAPIView):
     queryset = School.objects.all()
@@ -99,71 +95,69 @@ class SchoolHighlight(generics.GenericAPIView):
         school = self.get_object()
         return Response(school.highlight)
 
+class LoanHighlight(generics.GenericAPIView):
+    queryset = Loan.objects.all()
+    renderer_classes = (renderers.StaticHTMLRenderer,)
 
-@api_view(('GET',))
-def api_root(request, format=None):
+    def get(self, request, *args, **kwargs):
+        loan = self.get_object()
+        return Response(loan.highlight)
+
+class GrantHighlight(generics.GenericAPIView):
+    queryset = Grant.objects.all()
+    renderer_classes = (renderers.StaticHTMLRenderer,)
+
+    def get(self, request, *args, **kwargs):
+        grant = self.get_object()
+        return Response(grant.highlight)
+
+class LoanList(generics.ListCreateAPIView):
     """
-    Endpoints Available for Student Loan & Grant Data.
-    (Currently, schools_url is the only navigable link from the API root page.)
-
+    Retrieve all loans.
     """
-    return Response({
-        'school_url':  'http://localhost:7000/schools/{school}/',
-        'school_grants_url': 'http://localhost:7000/schools/{school}/grants/',
-        'school_loans_url': 'http://localhost:7000/schools/{school}/loans/',
-        'schools_url': reverse('school-list', request=request, format=format),
-    })
 
+    model= Loan
+    serializer_class = LoanSerializer
 
-#Convert to redis store before implementing these views to avoid socket error
+    def get_queryset(self):
+        queryset = Loan.objects.all()
+        return queryset
 
-# class GrantListByYear(APIView):
-#     """
-#     Retrieve all grants from a specific year.
-#     """
-#
-#     def get(self, request, year, format=None):
-#         grants = Grant.objects.filter(year=year)
-#         serializer = GrantSerializer(grants, many=True)
-#         return Response(serializer.data)
-#
-#
-# class LoanListByYear(APIView):
-#     """
-#     Retrieve all loans from a specific year.
-#     """
-#
-#     def get(self, request, year, format=None):
-#         loans = Loan.objects.filter(year=year)
-#         serializer = LoanSerializer(loans, many=True)
-#         return Response(serializer.data)
-
-class LoanDetail(APIView):
+class GrantList(generics.ListCreateAPIView):
     """
-    Retrieve, update or delete a school instance.
+    Retrieve all grants.
     """
-    def get_object(self, pk):
-        try:
-            return Loan.objects.get(pk=pk)
-        except Loan.DoesNotExist:
-            raise Http404
 
-    def get(self, request, pk, format=None):
-        loan = self.get_object(pk)
-        serializer = LoanSerializer(loan, context={'request': request})
-        return Response(serializer.data)
+    model= Grant
+    serializer_class = GrantSerializer
 
-class GrantDetail(APIView):
+    def get_queryset(self):
+        queryset = Grant.objects.all()
+        return queryset
+
+class LoanDetail(generics.ListAPIView):
     """
-    Retrieve, update or delete a school instance.
+    Retrieve, update or delete a loan instance.
     """
-    def get_object(self, pk):
-        try:
-            return Grant.objects.get(pk=pk)
-        except Grant.DoesNotExist:
-            raise Http404
+    model= Loan
+    serializer_class = LoanSerializer
 
-    def get(self, request, pk, format=None):
-        grant = self.get_object(pk)
-        serializer = GrantSerializer(grant, context={'request': request})
-        return Response(serializer.data)
+    def get_queryset(self):
+        """
+
+        """
+        pk = self.kwargs['pk']
+        return Loan.objects.filter(id=pk)
+
+class GrantDetail(generics.ListAPIView):
+    """
+    Retrieve, update or delete a grant instance.
+    """
+    model= Grant
+    serializer_class = GrantSerializer
+
+    def get_queryset(self):
+        """
+        """
+        pk = self.kwargs['pk']
+        return Grant.objects.filter(id=pk)
