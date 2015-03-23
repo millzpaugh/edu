@@ -9,5 +9,5 @@ venv
 .venv
 *.ipynb
 *.db
-conf/
+config/
 settings/
