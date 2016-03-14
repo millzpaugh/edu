@@ -10,4 +10,3 @@ venv
 *.ipynb
 *.db
 config/
-settings/
